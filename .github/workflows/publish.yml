@@ -13,7 +13,7 @@ on:
 jobs:
     tag:
         name: Update tag
-        if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' }}
+        if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
         runs-on: ubuntu-23.04
         steps:
             - name: Checkout code
