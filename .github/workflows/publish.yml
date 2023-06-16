@@ -32,9 +32,10 @@ jobs:
                   ${{ steps.version.outputs.version }}
                 write-mode: overwrite
             - name: Set up QEMU
+              id: qemu
               uses: docker/setup-qemu-action@v2.1.0
               with:
-                  platforms: linux/386,linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64/v8,linux/ppc64le,linux/s390x
+                  platforms: linux/amd64,linux/arm64,linux/armv7,linux/riscv64
             - name: Set up Docker Buildx
               uses: docker/setup-buildx-action@v2.5.0
             - name: Login to GitHub Container Registry
@@ -44,11 +45,12 @@ jobs:
                   username: ${{ github.repository_owner }}
                   password: ${{ secrets.GITHUB_TOKEN }}
             - name: Build and push
+              id: build
               uses: docker/build-push-action@v4.0.0
               with:
                   context: .
                   push: true
-                  platforms: linux/386,linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64/v8,linux/ppc64le,linux/s390x
+                  platforms: ${{ steps.qemu.outputs.platforms }}
                   tags: |
                       ghcr.io/danclough/amcrest2mqtt:latest
                       ghcr.io/danclough/amcrest2mqtt:${{ steps.version.outputs.version }}
