@@ -7,7 +7,6 @@ on:
         paths-ignore:
             - 'README.md'
             - 'LICENSE'
-            - 'VERSION'
             - '.gitignore'
             - '.github/**'
 
@@ -25,13 +24,6 @@ jobs:
               with:
                 scheme: semver
                 increment: patch
-#            - name: Bump version
-#              uses: remorses/bump-version@js
-#              id: version
-#              with:
-#                  version_file: ./VERSION
-#              env:
-#                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
             - name: Checkout code
               uses: actions/checkout@v3
               with:
