@@ -24,10 +24,13 @@ jobs:
               with:
                 scheme: semver
                 increment: patch
-            - name: Checkout code
-              uses: actions/checkout@v3
+            - name: Write version
+              uses: DamianReeves/write-file-action@master
               with:
-                  ref: main
+                path: ./VERSION
+                contents: |
+                  ${{ steps.version.outputs.version }}
+                write-mode: overwrite
             - name: Set up QEMU
               uses: docker/setup-qemu-action@v2.1.0
               with:
