@@ -19,13 +19,19 @@ jobs:
         steps:
             - name: Checkout code
               uses: actions/checkout@v3
-            - name: Bump version
-              uses: remorses/bump-version@js
+            - name: Get next version
+              uses: reecetech/version-increment@2023.4.1
               id: version
               with:
-                  version_file: ./VERSION
-              env:
-                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                scheme: semver
+                increment: patch
+#            - name: Bump version
+#              uses: remorses/bump-version@js
+#              id: version
+#              with:
+#                  version_file: ./VERSION
+#              env:
+#                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
             - name: Checkout code
               uses: actions/checkout@v3
               with:
