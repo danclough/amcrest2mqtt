@@ -18,18 +18,17 @@ jobs:
         steps:
             - name: Checkout code
               uses: actions/checkout@v3
-            - name: Get next version
-              uses: reecetech/version-increment@2023.4.1
-              id: version
+            - name: Bump version and push tag
+              id: tag_version
+              uses: mathieudutour/github-tag-action@v6.1
               with:
-                scheme: semver
-                increment: patch
+                github_token: ${{ secrets.GITHUB_TOKEN }}
             - name: Write version
               uses: DamianReeves/write-file-action@master
               with:
                 path: ./VERSION
                 contents: |
-                  ${{ steps.version.outputs.version }}
+                  ${{ steps.tag_version.outputs.new_tag }}
                 write-mode: overwrite
             - name: Set up QEMU
               id: qemu
@@ -53,5 +52,5 @@ jobs:
                   platforms: ${{ steps.qemu.outputs.platforms }}
                   tags: |
                       ghcr.io/danclough/amcrest2mqtt:latest
-                      ghcr.io/danclough/amcrest2mqtt:${{ steps.version.outputs.version }}
-                  labels: "version=${{ steps.version.outputs.version }}"
+                      ghcr.io/danclough/amcrest2mqtt:${{ steps.tag_version.outputs.new_tag }}
+                  labels: "version=${{ steps.tag_version.outputs.new_tag }}"
