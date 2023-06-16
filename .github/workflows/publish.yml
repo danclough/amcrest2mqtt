@@ -14,7 +14,7 @@ jobs:
     docker-publish:
         name: Publish to GitHub Container Registry
         if: "!contains(github.event.head_commit.message, '[ci skip]')"
-        runs-on: ubuntu-23.04
+        runs-on: ubuntu-22.04
         steps:
             - name: Checkout code
               uses: actions/checkout@v3
