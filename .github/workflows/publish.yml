@@ -11,9 +11,9 @@ on:
             - '.github/**'
 
 jobs:
-    tag:
-        name: Update tag
-        if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
+    docker-publish:
+        name: Publish to GitHub Container Registry
+        if: "!contains(github.event.head_commit.message, '[ci skip]')"
         runs-on: ubuntu-23.04
         steps:
             - name: Checkout code
@@ -23,13 +23,7 @@ jobs:
               uses: mathieudutour/github-tag-action@v6.1
               with:
                 github_token: ${{ secrets.GITHUB_TOKEN }}
-    docker-publish:
-        name: Publish to GitHub Container Registry
-        if: "!contains(github.event.head_commit.message, '[ci skip]')"
-        runs-on: ubuntu-23.04
-        steps:
-            - name: Checkout code
-              uses: actions/checkout@v3
+              if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
             - name: 'Get Previous tag'
               id: tag
               uses: "WyriHaximus/github-action-get-previous-tag@v1"
