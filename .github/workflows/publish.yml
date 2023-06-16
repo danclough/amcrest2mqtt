@@ -19,20 +19,16 @@ jobs:
             - name: Checkout code
               uses: actions/checkout@v3
             - name: Bump version and push tag
-              id: tag_version
+              id: tag
               uses: mathieudutour/github-tag-action@v6.1
               with:
                 github_token: ${{ secrets.GITHUB_TOKEN }}
-              if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
-            - name: 'Get Previous tag'
-              id: tag
-              uses: "WyriHaximus/github-action-get-previous-tag@v1"
             - name: Write version
               uses: DamianReeves/write-file-action@master
               with:
                 path: ./VERSION
                 contents: |
-                  ${{ steps.tag.outputs.tag }}
+                  ${{ steps.tag.outputs.new_tag }}
                 write-mode: overwrite
             - name: Set up QEMU
               id: qemu
@@ -56,5 +52,5 @@ jobs:
                   platforms: ${{ steps.qemu.outputs.platforms }}
                   tags: |
                       ghcr.io/danclough/amcrest2mqtt:latest
-                      ghcr.io/danclough/amcrest2mqtt:${{ steps.tag.outputs.tag }}
-                  labels: "version=${{ steps.tag.outputs.tag }}"
+                      ghcr.io/danclough/amcrest2mqtt:${{ steps.tag.outputs.new_tag }}
+                  labels: "version=${{ steps.tag.outputs.new_tag }}"
