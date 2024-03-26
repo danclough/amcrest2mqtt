@@ -2,13 +2,13 @@ name: Publish
 
 on:
     push:
-        branches:
-            - main
-        paths-ignore:
-            - 'README.md'
-            - 'LICENSE'
-            - '.gitignore'
-            - '.github/**'
+        tags:
+            - 'v*'
+#        paths-ignore:
+#            - 'README.md'
+#            - 'LICENSE'
+#            - '.gitignore'
+#            - '.github/**'
 
 jobs:
     docker-publish:
