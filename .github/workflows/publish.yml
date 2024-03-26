@@ -2,10 +2,8 @@ name: Publish
 
 on:
     push:
-      release:
-        types: [published]
-#        tags:
-#            - 'v*'
+        tags:
+            - 'v*'
 #        paths-ignore:
 #            - 'README.md'
 #            - 'LICENSE'
