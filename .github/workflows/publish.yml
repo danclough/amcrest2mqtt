@@ -2,8 +2,10 @@ name: Publish
 
 on:
     push:
-        tags:
-            - 'v*'
+      release:
+        types: [published]
+#        tags:
+#            - 'v*'
 #        paths-ignore:
 #            - 'README.md'
 #            - 'LICENSE'
@@ -18,17 +20,17 @@ jobs:
         steps:
             - name: Checkout code
               uses: actions/checkout@v4
-            - name: Bump version and push tag
-              id: tag
-              uses: mathieudutour/github-tag-action@v6.1
-              with:
-                github_token: ${{ secrets.GITHUB_TOKEN }}
+#            - name: Bump version and push tag
+#              id: tag
+#              uses: mathieudutour/github-tag-action@v6.1
+#              with:
+#                github_token: ${{ secrets.GITHUB_TOKEN }}
             - name: Write version
               uses: DamianReeves/write-file-action@master
               with:
                 path: ./VERSION
                 contents: |
-                  ${{ steps.tag.outputs.new_tag }}
+                  ${{ github.ref_name }}
                 write-mode: overwrite
             - name: Set up QEMU
               id: qemu
@@ -52,5 +54,5 @@ jobs:
                   platforms: linux/amd64,linux/arm64
                   tags: |
                       ghcr.io/danclough/amcrest2mqtt:latest
-                      ghcr.io/danclough/amcrest2mqtt:${{ steps.tag.outputs.new_tag }}
-                  labels: "version=${{ steps.tag.outputs.new_tag }}"
+                      ghcr.io/danclough/amcrest2mqtt:${{ github.ref_name }}
+                  labels: "version=${{ github.ref_name }}"
