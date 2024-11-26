@@ -69,8 +69,8 @@ def mqtt_publish(topic, payload, exit_on_error=True, json=False):
     if exit_on_error:
         exit_gracefully(msg.rc, skip_mqtt=True)
 
-def on_mqtt_disconnect(client, userdata, rc):
-    if rc != 0:
+def on_mqtt_disconnect(client, userdata, reason_code, properties):
+    if reason_code > 0:
         log(f"Unexpected MQTT disconnection", level="ERROR")
         exit_gracefully(rc, skip_mqtt=True)
 
@@ -100,7 +100,9 @@ def refresh_storage_sensors():
         mqtt_publish(topics["storage_used"], to_gb(storage["used"]))
         mqtt_publish(topics["storage_total"], to_gb(storage["total"]))
     except AmcrestError as error:
-        log(f"Error fetching storage information {error}", level="WARNING")
+        log(f"Error fetching storage information - {error}", level="WARNING")
+    except ValueError as error:
+        log(f"Error parsing values from the storage sensors - {error}", level="WARNING")
 
 def to_gb(total):
     return str(round(float(total[0]) / 1024 / 1024 / 1024, 2))
